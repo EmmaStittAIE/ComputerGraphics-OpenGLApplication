@@ -145,11 +145,19 @@
     <ClInclude Include="..\lib\glad\khrplatform.h" />
     <ClInclude Include="..\src\Maths.h" />
     <ClInclude Include="..\src\Utility.h" />
+    <ClInclude Include="ShaderProgram.h" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\assets\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\assets\WindowTitles.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\assets\shaders\Basic.frag" />
+    <None Include="..\assets\shaders\Basic.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

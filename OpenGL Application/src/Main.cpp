@@ -8,6 +8,7 @@
 #include "Maths.h"
 #include "Utility.h"
 
+
 int main(void)
 {
 	GLFWwindow* window;
