@@ -139,13 +139,16 @@
   <ItemGroup>
     <ClCompile Include="..\lib\glad\glad.c" />
     <ClCompile Include="..\src\Main.cpp" />
+    <ClCompile Include="..\src\ShaderProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\lib\glad\glad.h" />
     <ClInclude Include="..\lib\glad\khrplatform.h" />
+    <ClInclude Include="..\src\GraphicsDef.h" />
     <ClInclude Include="..\src\Maths.h" />
-    <ClInclude Include="..\src\Utility.h" />
-    <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="..\src\Mesh.h" />
+    <ClInclude Include="..\src\ShaderProgram.h" />
+    <ClInclude Include="..\src\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\assets\**">

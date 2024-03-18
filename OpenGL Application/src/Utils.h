@@ -4,7 +4,7 @@
 
 namespace Utils
 {
-	const std::string LoadFileToString(std::string filePath)
+	inline const std::string LoadFileToString(std::string filePath)
 	{
 		std::stringstream fileContent;
 

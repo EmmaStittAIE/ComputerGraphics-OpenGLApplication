@@ -19,6 +19,9 @@
     <Filter Include="Source Files\External\GLAD">
       <UniqueIdentifier>{cf97d788-26f1-4c5e-894e-9be94bab31bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{f7295219-f70b-48f6-b308-0d26e477ca39}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Main.cpp">
@@ -26,6 +29,9 @@
     </ClCompile>
     <ClCompile Include="..\lib\glad\glad.c">
       <Filter>Source Files\External\GLAD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ShaderProgram.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -38,9 +44,29 @@
     <ClInclude Include="..\src\Maths.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Utils.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ShaderProgram.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GraphicsDef.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Mesh.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\assets\WindowTitle.txt">
+    <None Include="..\assets\shaders\Basic.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\Basic.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\assets\WindowTitles.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
