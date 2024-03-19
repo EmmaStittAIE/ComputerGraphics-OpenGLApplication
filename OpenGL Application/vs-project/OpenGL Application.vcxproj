@@ -106,7 +106,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib\glad;$(SolutionDir)lib\glm;$(SolutionDir)lib\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\stb;$(SolutionDir)lib\glad;$(SolutionDir)lib\glm;$(SolutionDir)lib\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -124,7 +124,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib\glad;$(SolutionDir)lib\glm;$(SolutionDir)lib\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\stb;$(SolutionDir)lib\glad;$(SolutionDir)lib\glm;$(SolutionDir)lib\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -144,9 +144,11 @@
   <ItemGroup>
     <ClInclude Include="..\lib\glad\glad.h" />
     <ClInclude Include="..\lib\glad\khrplatform.h" />
+    <ClInclude Include="..\lib\stb\stb_image.h" />
     <ClInclude Include="..\src\GraphicsDef.h" />
     <ClInclude Include="..\src\Maths.h" />
     <ClInclude Include="..\src\Mesh.h" />
+    <ClInclude Include="..\src\ResourceManager.h" />
     <ClInclude Include="..\src\ShaderProgram.h" />
     <ClInclude Include="..\src\Utils.h" />
   </ItemGroup>

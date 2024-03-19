@@ -5,10 +5,12 @@
 
 struct Vertex
 {
-	// TODO: Add texture coordinates (vec2) and normal (vec3)
 	glm::vec3 position;
+	glm::vec3 normal;
 
 	glm::vec4 colour;
+
+	glm::vec2 UV;
 };
 
 struct Mesh

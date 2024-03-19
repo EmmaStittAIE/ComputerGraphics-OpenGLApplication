@@ -22,6 +22,9 @@
     <Filter Include="Resource Files\Shaders">
       <UniqueIdentifier>{f7295219-f70b-48f6-b308-0d26e477ca39}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\External\stb">
+      <UniqueIdentifier>{bc1904d5-b610-4fe3-b67c-0fdf5d959ea7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Main.cpp">
@@ -55,6 +58,12 @@
     </ClInclude>
     <ClInclude Include="..\src\Mesh.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ResourceManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lib\stb\stb_image.h">
+      <Filter>Source Files\External\stb</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

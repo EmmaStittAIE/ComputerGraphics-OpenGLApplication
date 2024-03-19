@@ -33,8 +33,10 @@ public:
 
 	void UseShaderProgram();
 
+	void SetUniformInt(std::string uniformName, int value);
 	void SetUniformFloat(std::string uniformName, float value);
 	void SetUniformVec2(std::string uniformName, float x, float y);
+	void SetUniformVec3(std::string uniformName, float x, float y, float z);
 	void SetUniformMat4(std::string uniformName, float* matrix);
 
 	~ShaderProgram();

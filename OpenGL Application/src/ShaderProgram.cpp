@@ -130,6 +130,19 @@ void ShaderProgram::UseShaderProgram()
 	glUseProgram(m_shaderProgram);
 }
 
+void ShaderProgram::SetUniformInt(std::string uniformName, int value)
+{
+	GLint uniformLocation = glGetUniformLocation(m_shaderProgram, uniformName.c_str());
+	if (uniformLocation == -1)
+	{
+		// TODO: error reporting
+	}
+	else
+	{
+		glUniform1i(uniformLocation, value);
+	}
+}
+
 void ShaderProgram::SetUniformFloat(std::string uniformName, float value)
 {
 	GLint uniformLocation = glGetUniformLocation(m_shaderProgram, uniformName.c_str());
@@ -153,6 +166,19 @@ void ShaderProgram::SetUniformVec2(std::string uniformName, float x, float y)
 	else
 	{
 		glUniform2f(uniformLocation, x, y);
+	}
+}
+
+void ShaderProgram::SetUniformVec3(std::string uniformName, float x, float y, float z)
+{
+	GLint uniformLocation = glGetUniformLocation(m_shaderProgram, uniformName.c_str());
+	if (uniformLocation == -1)
+	{
+		// TODO: error reporting
+	}
+	else
+	{
+		glUniform3f(uniformLocation, x, y, z);
 	}
 }
 
