@@ -1,8 +1,5 @@
 #include "GraphicsDef.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
 #include <string>
 #include <vector>
 
@@ -10,6 +7,12 @@
 #include "Utils.h"
 #include "ShaderProgram.h"
 #include "Mesh.h"
+#include "Texture.h"
+
+#include "TransformNode.h"
+#include "MeshRenderer.h"
+
+#include <iostream>
 
 struct Resolution
 {
@@ -18,6 +21,16 @@ struct Resolution
 
 	float aspect;
 };
+
+void APIENTRY GLDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+{
+	std::cout << "Source: " << source << std::endl
+			  << "Type: " << type << std::endl
+			  << "ID: " << id << std::endl
+			  << "Severity: " << severity << std::endl
+			  << "Message: " << message << std::endl
+			  << "---" << std::endl;
+}
 
 void OnWindowResize(GLFWwindow* window, int width, int height)
 {
@@ -49,9 +62,15 @@ int main(void)
 		return -1;
 	}
 	
+#ifdef _DEBUG
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+#endif
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 	// Create window
 	std::string windowTitle = Utils::LoadFileToString("WindowTitles.txt");
-
 	window = glfwCreateWindow(res.width, res.height, windowTitle.c_str(), nullptr, nullptr);
 	if (!window)
 	{
@@ -74,89 +93,32 @@ int main(void)
 		return -1;
 	}
 
+#ifdef _DEBUG
+	glEnable(GL_DEBUG_OUTPUT);
+	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+	glDebugMessageCallback(GLDebugCallback, nullptr);
+	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
+#endif
+
 	ShaderProgram basicShader("shaders/Basic.vert", "shaders/Basic.frag");
 
 	basicShader.UseShaderProgram();
 
 	glClearColor(1, 0.7f, 0.8f, 1);
 
-	// ew texture loading
-	GLuint textureID;
-	int width, height, n;
-
-	unsigned char* imageData = stbi_load("textures/texture.png", &width, &height, &n, 0);
-
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	stbi_image_free(imageData);
-
-	
-
-	Mesh cubeMesh
-	{
-		{  // Position					 Normal						Colour						  UV
-			{ Vec3(-1.0f, -1.0f,  1.0f), Vec3( 0.0f,  0.0f,  1.0f), Vec4(1.0f, 0.0f, 0.0f, 1.0f), Vec2( 0.0f,  0.0f) },		// Front
-			{ Vec3(-1.0f,  1.0f,  1.0f), Vec3( 0.0f,  0.0f,  1.0f), Vec4(0.0f, 1.0f, 0.0f, 1.0f), Vec2( 0.0f,  1.0f) },
-			{ Vec3( 1.0f, -1.0f,  1.0f), Vec3( 0.0f,  0.0f,  1.0f), Vec4(0.0f, 0.0f, 1.0f, 1.0f), Vec2( 1.0f,  0.0f) },
-			{ Vec3( 1.0f,  1.0f,  1.0f), Vec3( 0.0f,  0.0f,  1.0f), Vec4(1.0f, 0.0f, 0.0f, 1.0f), Vec2( 1.0f,  1.0f) },
-			{ Vec3(-1.0f,  1.0f,  1.0f), Vec3( 0.0f,  0.0f,  1.0f), Vec4(0.0f, 1.0f, 0.0f, 1.0f), Vec2( 0.0f,  1.0f) },
-			{ Vec3( 1.0f, -1.0f,  1.0f), Vec3( 0.0f,  0.0f,  1.0f), Vec4(0.0f, 0.0f, 1.0f, 1.0f), Vec2( 1.0f,  0.0f) },
-
-			{ Vec3(-1.0f, -1.0f, -1.0f), Vec3( 0.0f,  0.0f, -1.0f), Vec4(0.0f, 1.0f, 1.0f, 1.0f), Vec2( 0.0f,  0.0f) },		// Back
-			{ Vec3(-1.0f,  1.0f, -1.0f), Vec3( 0.0f,  0.0f, -1.0f), Vec4(0.0f, 1.0f, 1.0f, 1.0f), Vec2( 0.0f,  1.0f) },
-			{ Vec3( 1.0f, -1.0f, -1.0f), Vec3( 0.0f,  0.0f, -1.0f), Vec4(0.0f, 1.0f, 1.0f, 1.0f), Vec2( 1.0f,  0.0f) },
-			{ Vec3( 1.0f,  1.0f, -1.0f), Vec3( 0.0f,  0.0f, -1.0f), Vec4(0.0f, 1.0f, 1.0f, 1.0f), Vec2( 1.0f,  1.0f) },
-			{ Vec3(-1.0f,  1.0f, -1.0f), Vec3( 0.0f,  0.0f, -1.0f), Vec4(0.0f, 1.0f, 1.0f, 1.0f), Vec2( 0.0f,  1.0f) },
-			{ Vec3( 1.0f, -1.0f, -1.0f), Vec3( 0.0f,  0.0f, -1.0f), Vec4(0.0f, 1.0f, 1.0f, 1.0f), Vec2( 1.0f,  0.0f) },
-
-			{ Vec3( 1.0f, -1.0f, -1.0f), Vec3( 1.0f,  0.0f,  0.0f), Vec4(0.0f, 1.0f, 0.0f, 1.0f), Vec2( 0.0f,  0.0f) },		// Right
-			{ Vec3( 1.0f,  1.0f, -1.0f), Vec3( 1.0f,  0.0f,  0.0f), Vec4(0.0f, 1.0f, 0.0f, 1.0f), Vec2( 0.0f,  1.0f) },
-			{ Vec3( 1.0f, -1.0f,  1.0f), Vec3( 1.0f,  0.0f,  0.0f), Vec4(0.0f, 1.0f, 0.0f, 1.0f), Vec2( 1.0f,  0.0f) },
-			{ Vec3( 1.0f,  1.0f,  1.0f), Vec3( 1.0f,  0.0f,  0.0f), Vec4(0.0f, 1.0f, 0.0f, 1.0f), Vec2( 1.0f,  1.0f) },
-			{ Vec3( 1.0f,  1.0f, -1.0f), Vec3( 1.0f,  0.0f,  0.0f), Vec4(0.0f, 1.0f, 0.0f, 1.0f), Vec2( 0.0f,  1.0f) },
-			{ Vec3( 1.0f, -1.0f,  1.0f), Vec3( 1.0f,  0.0f,  0.0f), Vec4(0.0f, 1.0f, 0.0f, 1.0f), Vec2( 1.0f,  0.0f) },
-
-			{ Vec3(-1.0f, -1.0f, -1.0f), Vec3(-1.0f,  0.0f,  0.0f), Vec4(1.0f, 0.0f, 1.0f, 1.0f), Vec2( 0.0f,  0.0f) },		// Left
-			{ Vec3(-1.0f,  1.0f, -1.0f), Vec3(-1.0f,  0.0f,  0.0f), Vec4(1.0f, 0.0f, 1.0f, 1.0f), Vec2( 0.0f,  1.0f) },
-			{ Vec3(-1.0f, -1.0f,  1.0f), Vec3(-1.0f,  0.0f,  0.0f), Vec4(1.0f, 0.0f, 1.0f, 1.0f), Vec2( 1.0f,  0.0f) },
-			{ Vec3(-1.0f,  1.0f,  1.0f), Vec3(-1.0f,  0.0f,  0.0f), Vec4(1.0f, 0.0f, 1.0f, 1.0f), Vec2( 1.0f,  1.0f) },
-			{ Vec3(-1.0f,  1.0f, -1.0f), Vec3(-1.0f,  0.0f,  0.0f), Vec4(1.0f, 0.0f, 1.0f, 1.0f), Vec2( 0.0f,  1.0f) },
-			{ Vec3(-1.0f, -1.0f,  1.0f), Vec3(-1.0f,  0.0f,  0.0f), Vec4(1.0f, 0.0f, 1.0f, 1.0f), Vec2( 1.0f,  0.0f) },
-
-			{ Vec3(-1.0f,  1.0f, -1.0f), Vec3( 0.0f,  1.0f,  0.0f), Vec4(0.0f, 0.0f, 1.0f, 1.0f), Vec2( 0.0f,  0.0f) },		// Top
-			{ Vec3(-1.0f,  1.0f,  1.0f), Vec3( 0.0f,  1.0f,  0.0f), Vec4(0.0f, 0.0f, 1.0f, 1.0f), Vec2( 0.0f,  1.0f) },
-			{ Vec3( 1.0f,  1.0f, -1.0f), Vec3( 0.0f,  1.0f,  0.0f), Vec4(0.0f, 0.0f, 1.0f, 1.0f), Vec2( 1.0f,  0.0f) },
-			{ Vec3( 1.0f,  1.0f,  1.0f), Vec3( 0.0f,  1.0f,  0.0f), Vec4(0.0f, 0.0f, 1.0f, 1.0f), Vec2( 1.0f,  1.0f) },
-			{ Vec3(-1.0f,  1.0f,  1.0f), Vec3( 0.0f,  1.0f,  0.0f), Vec4(0.0f, 0.0f, 1.0f, 1.0f), Vec2( 0.0f,  1.0f) },
-			{ Vec3( 1.0f,  1.0f, -1.0f), Vec3( 0.0f,  1.0f,  0.0f), Vec4(0.0f, 0.0f, 1.0f, 1.0f), Vec2( 1.0f,  0.0f) },
-
-			{ Vec3(-1.0f, -1.0f, -1.0f), Vec3( 0.0f, -1.0f,  0.0f), Vec4(1.0f, 1.0f, 0.0f, 1.0f), Vec2( 0.0f,  0.0f) },		// Bottom
-			{ Vec3(-1.0f, -1.0f,  1.0f), Vec3( 0.0f, -1.0f,  0.0f), Vec4(1.0f, 1.0f, 0.0f, 1.0f), Vec2( 0.0f,  1.0f) },
-			{ Vec3( 1.0f, -1.0f, -1.0f), Vec3( 0.0f, -1.0f,  0.0f), Vec4(1.0f, 1.0f, 0.0f, 1.0f), Vec2( 1.0f,  0.0f) },
-			{ Vec3( 1.0f, -1.0f,  1.0f), Vec3( 0.0f, -1.0f,  0.0f), Vec4(1.0f, 1.0f, 0.0f, 1.0f), Vec2( 1.0f,  1.0f) },
-			{ Vec3(-1.0f, -1.0f,  1.0f), Vec3( 0.0f, -1.0f,  0.0f), Vec4(1.0f, 1.0f, 0.0f, 1.0f), Vec2( 0.0f,  1.0f) },
-			{ Vec3( 1.0f, -1.0f, -1.0f), Vec3( 0.0f, -1.0f,  0.0f), Vec4(1.0f, 1.0f, 0.0f, 1.0f), Vec2( 1.0f,  0.0f) }
-		}
-	};
+	Texture coolTexture("textures/texture.png");
 
 	Vec3 lightDirection = glm::normalize(Vec3{ 1, -1, 1 });
 	basicShader.SetUniformVec3("lightDirection", lightDirection.x, lightDirection.y, lightDirection.z);
 	
-	GLuint vertexBufferID = 0;
-	glGenBuffers(1, &vertexBufferID);
+	Mesh cubeMesh;
+	cubeMesh.ConstructCubePrimitive();
+	//cubeMesh.ConstructFromFile();
 
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * cubeMesh.vertices.size(), cubeMesh.vertices.data(), GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
-	glEnableVertexAttribArray(3);
+	MeshRenderer cube1;
+	cube1.m_mesh = &cubeMesh;
+	cube1.m_texture = &coolTexture;
+	cube1.SetPosition(-2, 0, 0);
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -168,29 +130,15 @@ int main(void)
 		// Render start
 		glViewport(0, 0, res.width, res.height);
 
-		// (original matrix, angle to rotate by, axis to rotate around)
-		Mat4 modelMat = glm::rotate(Mat4(1.0f), (float)glfwGetTime(), { 0.0f, 1.0f, 0.0f });
 		// (camera pos, target pos, up vector)
 		//Mat4 viewMat = glm::lookAt(Vec3(5, ((int)(glfwGetTime() * 2) % 10) - 4, 5), Vec3(0, 0, 0), Vec3(0, 1, 0));
 		Mat4 viewMat = glm::lookAt(Vec3(0, 3, 5), Vec3(0, 0, 0), Vec3(0, 1, 0));
 		// (fov on the y axis, window aspect ratio, near clipping plane, far clipping plane)
 		Mat4 projectionMat = glm::perspective(PI / 2.0f, res.aspect, 0.1f, 50.f);
 
-		Mat4 mvpMat = projectionMat * viewMat * modelMat;
-		basicShader.SetUniformMat4("mvpMat", &mvpMat[0][0]);
+		cube1.SetEulerRotation(0, (float)glfwGetTime(), 0);
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		basicShader.SetUniformInt("textureSampler", 0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, sizeof(float) * 12, 0);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, sizeof(float) * 12, (void*)(3 * sizeof(float)));
-		glVertexAttribPointer(2, 4, GL_FLOAT, GL_TRUE, sizeof(float) * 12, (void*)(6 * sizeof(float)));
-		glVertexAttribPointer(3, 2, GL_FLOAT, GL_TRUE, sizeof(float) * 12, (void*)(10 * sizeof(float)));
-
-		glDrawArrays(GL_TRIANGLES, 0, cubeMesh.vertices.size());
+		cube1.Draw(&basicShader, projectionMat * viewMat);
 
 		// Render end
 

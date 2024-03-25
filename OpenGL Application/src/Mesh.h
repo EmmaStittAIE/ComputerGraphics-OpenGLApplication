@@ -1,19 +1,36 @@
 #pragma once
 
 #include <vector>
-#include "glm.hpp"
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
-struct Vertex
+#include "GraphicsDef.h"
+
+class Mesh
 {
-	glm::vec3 position;
-	glm::vec3 normal;
+private:
+	GLuint m_vertexBufferID = 0;
+	// Implement vertex indexing
+	//GLuint m_indexBufferID = 0;
 
-	glm::vec4 colour;
+	int m_vertexCount = 0;
 
-	glm::vec2 UV;
-};
+	void BindBuffer() const;
+	static void UnbindBuffer();
 
-struct Mesh
-{
-	std::vector<Vertex> vertices;
+public:
+	Mesh() = default;
+
+	void ConstructCubePrimitive();
+	void ConstructFromFile(std::string filePath);
+
+	void EquipVertices() const;
+	void UnequipVertices() const;
+
+	// Getters
+	int GetVertCount() const { return m_vertexCount; }
+	bool IsValid() const { return m_vertexBufferID != 0; }
+
+	~Mesh();
 };
