@@ -118,7 +118,7 @@ int main(void)
 	MeshRenderer cube1;
 	cube1.m_mesh = &cubeMesh;
 	cube1.m_texture = &coolTexture;
-	cube1.SetPosition(-2, 0, 0);
+	cube1.SetPosition(0, 0, 0);
 
 	glEnable(GL_DEPTH_TEST);
 

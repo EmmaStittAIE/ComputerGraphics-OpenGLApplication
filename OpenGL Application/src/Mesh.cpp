@@ -71,6 +71,7 @@ void Mesh::ConstructCubePrimitive()
 
 	BindBuffer();
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * m_vertexCount, verts.data(), GL_STATIC_DRAW);
+	Vertex::EnableAttributeArrays();
 	UnbindBuffer();
 }
 
