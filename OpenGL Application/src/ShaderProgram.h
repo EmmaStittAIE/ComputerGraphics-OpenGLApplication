@@ -33,6 +33,7 @@ public:
 
 	void UseShaderProgram();
 
+	// TODO: very tempted to template this...
 	void SetUniformInt(std::string uniformName, int value);
 	void SetUniformFloat(std::string uniformName, float value);
 	void SetUniformVec2(std::string uniformName, float x, float y);

@@ -28,6 +28,12 @@
     <Filter Include="Resource Files\Textures">
       <UniqueIdentifier>{3e1eed8e-40fa-4186-8288-85b9c64e6a5a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Models">
+      <UniqueIdentifier>{fc5ad911-5acc-4f82-af15-fc7110c8412a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Textures\Soul Spear">
+      <UniqueIdentifier>{05496d3d-2c06-483e-bacf-f536a282f428}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Main.cpp">
@@ -52,6 +58,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\MeshRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -98,6 +110,12 @@
     <ClInclude Include="..\src\Logger.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Camera.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Nodes.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\shaders\Basic.vert">
@@ -116,5 +134,19 @@
     <Image Include="..\assets\textures\texture.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
+    <Image Include="..\assets\textures\Soul Spear\soulspear_normal.tga">
+      <Filter>Resource Files\Textures\Soul Spear</Filter>
+    </Image>
+    <Image Include="..\assets\textures\Soul Spear\soulspear_specular.tga">
+      <Filter>Resource Files\Textures\Soul Spear</Filter>
+    </Image>
+    <Image Include="..\assets\textures\Soul Spear\soulspear_diffuse.tga">
+      <Filter>Resource Files\Textures\Soul Spear</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\assets\models\soulspear.obj">
+      <Filter>Resource Files\Models</Filter>
+    </Media>
   </ItemGroup>
 </Project>

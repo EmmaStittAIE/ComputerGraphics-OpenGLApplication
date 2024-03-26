@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "Utils.h"
+#include "Logger.h"
 
 void ShaderProgram::DeallocateShaders()
 {
@@ -23,7 +24,7 @@ ShaderProgram::ShaderProgram(std::string vertexFilePath, std::string fragmentFil
 
 	if (vertexContent == "" || fragmentContent == "")
 	{
-		// TODO: error reporting
+		Logger::Log({ "One or more shaders did not load successfully." }, LogType::Error);
 		DeallocateShaders();
 		return;
 	}
@@ -41,17 +42,15 @@ ShaderProgram::ShaderProgram(std::string vertexFilePath, std::string fragmentFil
 		glGetShaderiv(m_vertexShader, GL_COMPILE_STATUS, &success);
 		if (!success)
 		{
-			// TODO: error reporting
-			std::cout << "Vertex shader " << vertexFilePath << " failed with error:\n";
 			glGetShaderInfoLog(m_vertexShader, 512, nullptr, errorLog);
-			std::cout << errorLog << '\n';
+			Logger::Log({ "Vertex shader at \"", vertexFilePath, "\" failed to compile with error:\n", errorLog }, LogType::Error);
+
 			DeallocateShaders();
 			return;
 		}
 		else
 		{
-			// TODO: command line log
-			// vertex shader compiled successfully
+			Logger::Log({ "Vertex shader compiled successfully" }, LogType::Info);
 		}
 
 		glShaderSource(m_fragmentShader, 1, &fragmentContentCStr, nullptr);
@@ -60,17 +59,14 @@ ShaderProgram::ShaderProgram(std::string vertexFilePath, std::string fragmentFil
 		glGetShaderiv(m_fragmentShader, GL_COMPILE_STATUS, &success);
 		if (!success)
 		{
-			// TODO: error reporting
-			std::cout << "Fragment shader " << fragmentFilePath << " failed with error:\n";
 			glGetShaderInfoLog(m_fragmentShader, 512, nullptr, errorLog);
-			std::cout << errorLog << '\n';
+			Logger::Log({ "Fragment shader at \"", vertexFilePath, "\" failed to compile with error:\n", errorLog }, LogType::Error);
 			DeallocateShaders();
 			return;
 		}
 		else
 		{
-			// TODO: command line log
-			// fragment shader compiled successfully
+			Logger::Log({ "Fragment shader compiled successfully" }, LogType::Info);
 		}
 
 		glAttachShader(m_shaderProgram, m_vertexShader);
@@ -79,15 +75,15 @@ ShaderProgram::ShaderProgram(std::string vertexFilePath, std::string fragmentFil
 		glGetProgramiv(m_shaderProgram, GL_LINK_STATUS, &success);
 		if (!success)
 		{
-			// TODO: error reporting
+			glGetProgramInfoLog(m_shaderProgram, 512, nullptr, errorLog);
+			Logger::Log({ "Shader program failed to link with error:\n", errorLog }, LogType::Error);
 			DeallocateShaders();
 			return;
 		}
 	}
 
 	m_loadSuccessful = true;
-	// TODO: command line log
-	// shader program compiled and linked successfully
+	Logger::Log({ "Shader program compiled and linked successfully" }, LogType::Info);
 }
 
 ShaderProgram::ShaderProgram(ShaderProgram&& other) noexcept
@@ -135,12 +131,11 @@ void ShaderProgram::SetUniformInt(std::string uniformName, int value)
 	GLint uniformLocation = glGetUniformLocation(m_shaderProgram, uniformName.c_str());
 	if (uniformLocation == -1)
 	{
-		// TODO: error reporting
+		Logger::Log({ "Uniform \"", uniformName, "\" does not exist."}, LogType::Error);
+		return;
 	}
-	else
-	{
-		glUniform1i(uniformLocation, value);
-	}
+
+	glUniform1i(uniformLocation, value);
 }
 
 void ShaderProgram::SetUniformFloat(std::string uniformName, float value)
@@ -148,12 +143,10 @@ void ShaderProgram::SetUniformFloat(std::string uniformName, float value)
 	GLint uniformLocation = glGetUniformLocation(m_shaderProgram, uniformName.c_str());
 	if (uniformLocation == -1)
 	{
-		// TODO: error reporting
+		Logger::Log({ "Uniform \"", uniformName, "\" does not exist." }, LogType::Error);
 	}
-	else
-	{
-		glUniform1f(uniformLocation, value);
-	}
+	
+	glUniform1f(uniformLocation, value);
 }
 
 void ShaderProgram::SetUniformVec2(std::string uniformName, float x, float y)
@@ -161,12 +154,10 @@ void ShaderProgram::SetUniformVec2(std::string uniformName, float x, float y)
 	GLint uniformLocation = glGetUniformLocation(m_shaderProgram, uniformName.c_str());
 	if (uniformLocation == -1)
 	{
-		// TODO: error reporting
+		Logger::Log({ "Uniform \"", uniformName, "\" does not exist." }, LogType::Error);
 	}
-	else
-	{
-		glUniform2f(uniformLocation, x, y);
-	}
+		
+	glUniform2f(uniformLocation, x, y);
 }
 
 void ShaderProgram::SetUniformVec3(std::string uniformName, float x, float y, float z)
@@ -174,12 +165,10 @@ void ShaderProgram::SetUniformVec3(std::string uniformName, float x, float y, fl
 	GLint uniformLocation = glGetUniformLocation(m_shaderProgram, uniformName.c_str());
 	if (uniformLocation == -1)
 	{
-		// TODO: error reporting
+		Logger::Log({ "Uniform \"", uniformName, "\" does not exist." }, LogType::Error);
 	}
-	else
-	{
-		glUniform3f(uniformLocation, x, y, z);
-	}
+	
+	glUniform3f(uniformLocation, x, y, z);
 }
 
 void ShaderProgram::SetUniformMat4(std::string uniformName, float* matrix)
@@ -187,12 +176,10 @@ void ShaderProgram::SetUniformMat4(std::string uniformName, float* matrix)
 	GLint uniformLocation = glGetUniformLocation(m_shaderProgram, uniformName.c_str());
 	if (uniformLocation == -1)
 	{
-		// TODO: error reporting
+		Logger::Log({ "Uniform \"", uniformName, "\" does not exist." }, LogType::Error);
 	}
-	else
-	{
-		glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, matrix);
-	}
+
+	glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, matrix);
 }
 
 ShaderProgram::~ShaderProgram()

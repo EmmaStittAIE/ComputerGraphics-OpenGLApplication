@@ -144,6 +144,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\lib\glad\glad.c" />
+    <ClCompile Include="..\src\Camera.cpp" />
+    <ClCompile Include="..\src\Logger.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="..\src\Mesh.cpp" />
     <ClCompile Include="..\src\MeshRenderer.cpp" />
@@ -156,11 +158,13 @@
     <ClInclude Include="..\lib\glad\glad.h" />
     <ClInclude Include="..\lib\glad\khrplatform.h" />
     <ClInclude Include="..\lib\stb\stb_image.h" />
+    <ClInclude Include="..\src\Camera.h" />
     <ClInclude Include="..\src\GraphicsDef.h" />
     <ClInclude Include="..\src\Logger.h" />
     <ClInclude Include="..\src\Maths.h" />
     <ClInclude Include="..\src\Mesh.h" />
     <ClInclude Include="..\src\MeshRenderer.h" />
+    <ClInclude Include="..\src\Nodes.h" />
     <ClInclude Include="..\src\ResourceManager.h" />
     <ClInclude Include="..\src\ShaderProgram.h" />
     <ClInclude Include="..\src\Texture.h" />
@@ -181,7 +185,15 @@
     <None Include="..\assets\shaders\Basic.vert" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\assets\textures\Soul Spear\soulspear_diffuse.tga" />
+    <Image Include="..\assets\textures\Soul Spear\soulspear_normal.tga" />
+    <Image Include="..\assets\textures\Soul Spear\soulspear_specular.tga" />
     <Image Include="..\assets\textures\texture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\assets\models\soulspear.obj">
+      <FileType>Document</FileType>
+    </Media>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

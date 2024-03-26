@@ -16,6 +16,7 @@ public:
 	void BindBuffer(int textureIndex) const;
 	static void UnbindBuffer(int textureIndex);
 
+	// Bools
 	bool IsValid() const { return m_textureID != 0; }
 
 	~Texture();
