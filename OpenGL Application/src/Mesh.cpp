@@ -121,9 +121,9 @@ void Mesh::ConstructFromFile(std::string filePath)
 		currentVert.tangent.y = mesh->mTangents[i].y;
 		currentVert.tangent.z = mesh->mTangents[i].z;
 
-		currentVert.normal.x = mesh->mBitangents[i].x;
-		currentVert.normal.y = mesh->mBitangents[i].y;
-		currentVert.normal.z = mesh->mBitangents[i].z;
+		currentVert.bitangent.x = mesh->mBitangents[i].x;
+		currentVert.bitangent.y = mesh->mBitangents[i].y;
+		currentVert.bitangent.z = mesh->mBitangents[i].z;
 
 		vertData.push_back(currentVert);
 	}
